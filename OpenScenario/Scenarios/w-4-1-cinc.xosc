@@ -1,0 +1,268 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<OpenSCENARIO>
+  <FileHeader revMajor="1" revMinor="0" date="2020-06-16T10:00:00" description="ALKS Scenario 4.4_1 CutInNoCollision Template" author="BMW AG" />
+  <ParameterDeclarations>
+    <!--The ParameterDeclarations section is needed for easy variation.-->
+    <ParameterDeclaration name="Ego_InitPosition_LaneId" parameterType="string" value="-4" />
+    <ParameterDeclaration name="Ego_InitSpeed_Ve0" parameterType="double" value="16.66666667" />
+    <ParameterDeclaration name="Duration" parameterType="double" value="40" />
+    <ParameterDeclaration name="LeadVehicle_Model" parameterType="string" value="car" />
+    <ParameterDeclaration name="Standing_Model" parameterType="string" value="truck" />
+    <ParameterDeclaration name="LeadVehicle_InitDistance_dx0" parameterType="double" value="33.33333333" />
+    <ParameterDeclaration name="Swerve_Offset_Left" parameterType="double" value="1.0" />
+    <ParameterDeclaration name="Swerve_Offset_Right" parameterType="double" value="-1.0" />
+    <ParameterDeclaration name="Swerve_MaxLateralAcc" parameterType="double" value="0.3" />
+  </ParameterDeclarations>
+  <CatalogLocations>
+    <VehicleCatalog>
+      <Directory path="../Catalogs/Vehicles" />
+    </VehicleCatalog>
+    <PedestrianCatalog>
+      <Directory path="../Catalogs/Pedestrians" />
+    </PedestrianCatalog>
+    <MiscObjectCatalog>
+      <Directory path="../Catalogs/MiscObjects" />
+    </MiscObjectCatalog>
+    <ControllerCatalog>
+      <Directory path="../Catalogs/Controllers" />
+    </ControllerCatalog>
+  </CatalogLocations>
+  <RoadNetwork>
+    <LogicFile filepath="Town04" />
+  </RoadNetwork>
+  <Entities>
+    <ScenarioObject name="hero">
+      <CatalogReference catalogName="VehicleCatalog" entryName="car_ego"></CatalogReference>
+      <ObjectController>
+        <CatalogReference catalogName="ControllerCatalog" entryName="ALKSController"></CatalogReference>
+      </ObjectController>
+    </ScenarioObject>
+    <ScenarioObject name="LeadVehicle">
+      <CatalogReference catalogName="VehicleCatalog" entryName="$LeadVehicle_Model"></CatalogReference>
+    </ScenarioObject>
+    <ScenarioObject name="standing">
+      <CatalogReference catalogName="VehicleCatalog" entryName="$Standing_Model"></CatalogReference>
+    </ScenarioObject>
+  </Entities>
+  <Storyboard>
+    <Init>
+      <Actions>
+        <GlobalAction>
+          <EnvironmentAction>
+            <Environment name="Environment1">
+              <TimeOfDay animation="false" dateTime="2020-03-20T12:00:00"/>
+              <Weather cloudState="free">
+                <Sun intensity="0.85" azimuth="0" elevation="1.31"/>
+                <Fog visualRange="100000.0"/>
+                <Precipitation precipitationType="dry" intensity="0.0"/>
+              </Weather>
+              <RoadCondition frictionScaleFactor="1.0"/>
+            </Environment>
+          </EnvironmentAction>
+        </GlobalAction>
+        <Private entityRef="hero">
+          <PrivateAction>
+            <TeleportAction>
+              <Position>
+                <!-- <LanePosition roadId="0" laneId="$Ego_InitPosition_LaneId" offset="0.0" s="5.0"></LanePosition> -->
+                <!-- <LanePosition roadId="4" laneId="-1" offset="1.0" s="48.58"/> -->
+                <!-- <WorldPosition x="-9.4" y="-152.8" z="0.5" h="1.57079632679"/> -->
+                <WorldPosition x="-12.7" y="23.8" z="0.5" h="-1.57079632679"/>
+
+              </Position>
+            </TeleportAction>
+          </PrivateAction>
+          <PrivateAction>
+            <ControllerAction>
+              <AssignControllerAction>
+                <Controller name="HeroAgent">
+                  <Properties>
+                    <Property name="module" value="external_control"/>
+                  </Properties>
+                </Controller>
+              </AssignControllerAction>
+              <OverrideControllerValueAction>
+                <Throttle value="0" active="false"/>
+                <Brake value="0" active="false"/>
+                <Clutch value="0" active="false"/>
+                <ParkingBrake value="0" active="false"/>
+                <SteeringWheel value="0" active="false"/>
+                <Gear number="0" active="false"/>
+              </OverrideControllerValueAction>
+            </ControllerAction>
+          </PrivateAction>
+        </Private>
+        <Private entityRef="LeadVehicle">
+          <PrivateAction>
+            <TeleportAction>
+              <Position>
+                <!-- <RelativeLanePosition entityRef="hero" dLane="0" ds="$LeadVehicle_InitDistance_dx0" offset="0.0" /> -->
+                <WorldPosition x="-9.4" y="-71.0" z="0.5" h="-1.57079632679"/>
+              </Position>
+            </TeleportAction>
+          </PrivateAction>
+          <PrivateAction>
+            <LongitudinalAction>
+              <SpeedAction>
+                <SpeedActionDynamics dynamicsShape="step" dynamicsDimension="time" value="0" />
+                <SpeedActionTarget>
+                  <RelativeTargetSpeed entityRef="hero" value="0" speedTargetValueType="delta" continuous="false" />
+                </SpeedActionTarget>
+              </SpeedAction>
+            </LongitudinalAction>
+          </PrivateAction>
+        </Private>
+        <Private entityRef="standing">
+          <PrivateAction>
+            <TeleportAction>
+              <Position>
+                <!-- <WorldPosition x="-8.2" y="29.2" z="0.5" h="1.57079632679"/> -->
+                <WorldPosition x="-8.4" y="-152.8" z="0.5" h="-1.57079632679"/>
+              </Position>
+            </TeleportAction>
+          </PrivateAction>
+        </Private>
+      </Actions>
+    </Init>
+    <Story name="ActivateALKSControllerStory">
+      <Act name="ActivateALKSControllerAct">
+        <ManeuverGroup maximumExecutionCount="1" name="ActivateALKSControllerSequence">
+          <Actors selectTriggeringEntities="false">
+            <EntityRef entityRef="hero" />
+          </Actors>
+          <Maneuver name="ActivateALKSControllerManeuver">
+            <Event name="ActivateALKSControllerEvent" priority="overwrite">
+              <Action name="ActivateALKSControllerAction">
+                <PrivateAction>
+                  <ActivateControllerAction lateral="true" longitudinal="true" />
+                </PrivateAction>
+              </Action>
+              <StartTrigger>
+                <ConditionGroup>
+                  <Condition name="ActivateALKSControllerEventCondition" delay="0" conditionEdge="rising">
+                    <ByValueCondition>
+                      <SimulationTimeCondition value="10000" rule="greaterThan" />
+                    </ByValueCondition>
+                  </Condition>
+                </ConditionGroup>
+              </StartTrigger>
+            </Event>
+          </Maneuver>
+        </ManeuverGroup>
+        <StartTrigger>
+          <ConditionGroup>
+            <Condition name="ActivateALKSControllerActCondition" delay="0" conditionEdge="rising">
+              <ByValueCondition>
+                <SimulationTimeCondition value="0" rule="greaterThan" />
+              </ByValueCondition>
+            </Condition>
+          </ConditionGroup>
+        </StartTrigger>
+      </Act>
+    </Story>
+    <Story name="MyStory">
+      <Act name="Behavior">
+        <ManeuverGroup maximumExecutionCount="1" name="ManeuverSequence">
+          <Actors selectTriggeringEntities="false">
+            <EntityRef entityRef="LeadVehicle"/>
+          </Actors>
+          <Maneuver name="LaneChangeSimpleManeuver">
+            <Event name="AdversaryAccelerates" priority="overwrite">
+              <Action name="AdversaryAccelerates">
+                <PrivateAction>
+                  <LongitudinalAction>
+                    <SpeedAction>
+                      <SpeedActionDynamics dynamicsShape="step" value="50" dynamicsDimension="distance"/>
+                      <SpeedActionTarget>
+                        <AbsoluteTargetSpeed value="5.0"/>
+                      </SpeedActionTarget>
+                    </SpeedAction>
+                  </LongitudinalAction>
+                </PrivateAction>
+              </Action>
+              <StartTrigger>
+                <ConditionGroup>
+                  <Condition name="StartCondition" delay="0" conditionEdge="rising">
+                    <ByEntityCondition>
+                      <TriggeringEntities triggeringEntitiesRule="any">
+                        <EntityRef entityRef="hero"/>
+                      </TriggeringEntities>
+                      <EntityCondition>
+                        <RelativeDistanceCondition entityRef="LeadVehicle" relativeDistanceType="cartesianDistance" value="40.0" freespace="false" rule="lessThan"/>
+                      </EntityCondition>
+                    </ByEntityCondition>
+                  </Condition>
+                </ConditionGroup>
+              </StartTrigger>
+            </Event>
+            <Event name="AdversaryChangesLane" priority="overwrite">
+              <Action name="AdversaryChangesLane">
+                <PrivateAction>
+                  <LateralAction>
+                    <LaneChangeAction>
+                      <LaneChangeActionDynamics dynamicsShape="linear" value="25" dynamicsDimension="distance"/>
+                      <LaneChangeTarget>
+                        <RelativeTargetLane entityRef="LeadVehicle" value="-1"/>
+                      </LaneChangeTarget>
+                    </LaneChangeAction>
+                  </LateralAction>
+                </PrivateAction>
+              </Action>
+              <StartTrigger>
+                <ConditionGroup>
+                  <Condition name="AfterAdversaryAccelerates" delay="0" conditionEdge="rising">
+                    <ByValueCondition>
+                      <StoryboardElementStateCondition storyboardElementType="action" storyboardElementRef="AdversaryAccelerates" state="completeState"/>
+                    </ByValueCondition>
+                  </Condition>
+                </ConditionGroup>
+              </StartTrigger>
+            </Event>
+          </Maneuver>
+        </ManeuverGroup>
+        <StartTrigger>
+          <ConditionGroup>
+            <Condition name="OverallStartCondition" delay="0" conditionEdge="rising">
+              <ByEntityCondition>
+                <TriggeringEntities triggeringEntitiesRule="any">
+                  <EntityRef entityRef="hero"/>
+                </TriggeringEntities>
+                <EntityCondition>
+                  <TraveledDistanceCondition value="1.0"/>
+                </EntityCondition>
+              </ByEntityCondition>
+            </Condition>
+            <Condition name="StartTime" delay="0" conditionEdge="rising">
+              <ByValueCondition>
+                <SimulationTimeCondition value="0" rule="equalTo"/>
+              </ByValueCondition>
+            </Condition>
+          </ConditionGroup>
+        </StartTrigger>
+        <StopTrigger>
+          <ConditionGroup>
+            <Condition name="EndCondition" delay="0" conditionEdge="rising">
+              <ByEntityCondition>
+                <TriggeringEntities triggeringEntitiesRule="any">
+                  <EntityRef entityRef="hero"/>
+                </TriggeringEntities>
+                <EntityCondition>
+                  <TraveledDistanceCondition value="200.0"/>
+                </EntityCondition>
+              </ByEntityCondition>
+            </Condition>
+          </ConditionGroup>
+        </StopTrigger>
+      </Act>
+    </Story>
+    <StopTrigger>
+      <ConditionGroup>
+        <Condition name="End" delay="0" conditionEdge="rising">
+          <ByValueCondition>
+            <SimulationTimeCondition value="$Duration" rule="greaterThan" />
+          </ByValueCondition>
+        </Condition>
+      </ConditionGroup>
+    </StopTrigger>
+  </Storyboard>
+</OpenSCENARIO>

@@ -1,0 +1,360 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<OpenSCENARIO>
+  <FileHeader revMajor="1" revMinor="0" date="2020-06-16T10:00:00" description="ALKS Scenario 4.3_2 FollowLeadVehicleEmergencyBrake Template" author="BMW AG" />
+  <ParameterDeclarations>
+    <!--The ParameterDeclarations section is needed for easy variation.-->
+    <ParameterDeclaration name="Ego_InitPosition_LaneId" parameterType="string" value="-4" />
+    <ParameterDeclaration name="Ego_InitSpeed_Ve0" parameterType="double" value="16.66666667" />
+    <ParameterDeclaration name="Duration" parameterType="double" value="400" />
+    <ParameterDeclaration name="LeadVehicle_Model" parameterType="string" value="car" />
+    <ParameterDeclaration name="LeadVehicle_InitDistance_dx0" parameterType="double" value="33.33333333" />
+    <ParameterDeclaration name="LeadVehicle_BrakeRate_Gx_max" parameterType="double" value="2.0" />
+    <ParameterDeclaration name="leadingSpeed" parameterType="double" value="2.0"/>
+
+  </ParameterDeclarations>
+  <CatalogLocations>
+    <VehicleCatalog>
+      <Directory path="../Catalogs/Vehicles" />
+    </VehicleCatalog>
+    <PedestrianCatalog>
+      <Directory path="../Catalogs/Pedestrians" />
+    </PedestrianCatalog>
+    <MiscObjectCatalog>
+      <Directory path="../Catalogs/MiscObjects" />
+    </MiscObjectCatalog>
+    <ControllerCatalog>
+      <Directory path="../Catalogs/Controllers" />
+    </ControllerCatalog>
+  </CatalogLocations>
+  <RoadNetwork>
+    <!-- <LogicFile filepath="./ALKS_Road.xodr" /> -->
+    <!-- <LogicFile filepath="Town01" /> -->
+    <LogicFile filepath="Town04" />
+  </RoadNetwork>
+  <Entities>
+    <ScenarioObject name="hero">
+      <CatalogReference catalogName="VehicleCatalog" entryName="car_ego"></CatalogReference>
+      <ObjectController>
+        <CatalogReference catalogName="ControllerCatalog" entryName="ALKSController"></CatalogReference>
+      </ObjectController>
+    </ScenarioObject>
+    <ScenarioObject name="LeadVehicle">
+      <CatalogReference catalogName="VehicleCatalog" entryName="$LeadVehicle_Model"></CatalogReference>
+    </ScenarioObject>
+    <ScenarioObject name="Vehicle_3">
+      <CatalogReference catalogName="VehicleCatalog" entryName="truck"></CatalogReference>
+    </ScenarioObject>
+    <ScenarioObject name="Pedestrian_1">
+      <Pedestrian mass="90.0" model="walker.pedestrian.0012" name="walker.pedestrian.0012" pedestrianCategory="pedestrian">
+          <ParameterDeclarations/>
+          <BoundingBox>
+              <Center x="1.5" y="0.0" z="0.9"/>
+              <Dimensions height="1.8" length="1.0" width="1.0"/>
+          </BoundingBox>
+          <Properties>
+              <Property name="type" value="simulation"/>
+          </Properties>
+      </Pedestrian>
+    </ScenarioObject>
+    <ScenarioObject name="Vehicle_4">
+      <Vehicle name="vehicle.diamondback.century" vehicleCategory="car">
+          <ParameterDeclarations/>
+          <Performance maxAcceleration="200" maxDeceleration="10.0" maxSpeed="69.444"/>
+          <BoundingBox>
+              <Center x="1.5" y="0.0" z="0.9"/>
+              <Dimensions height="1.8" length="4.5" width="2.1"/>
+          </BoundingBox>
+          <Axles>
+              <FrontAxle maxSteering="0.5" positionX="3.1" positionZ="0.3" trackWidth="1.8" wheelDiameter="0.6"/>
+              <RearAxle maxSteering="0.0" positionX="0.0" positionZ="0.3" trackWidth="1.8" wheelDiameter="0.6"/>
+          </Axles>
+          <Properties>
+              <Property name="type" value="simulation"/>
+          </Properties>
+      </Vehicle>
+    </ScenarioObject>
+  </Entities>
+  <Storyboard>
+    <Init>
+      <Actions>
+        <GlobalAction>
+          <EnvironmentAction>
+            <Environment name="Environment1">
+              <TimeOfDay animation="false" dateTime="2020-03-20T12:00:00"/>
+              <Weather cloudState="free">
+                <Sun intensity="0.85" azimuth="0" elevation="1.31"/>
+                <Fog visualRange="100000.0"/>
+                <Precipitation precipitationType="dry" intensity="0.0"/>
+              </Weather>
+              <RoadCondition frictionScaleFactor="1.0"/>
+            </Environment>
+          </EnvironmentAction>
+        </GlobalAction>
+        <Private entityRef="hero">
+          <PrivateAction>
+            <TeleportAction>
+              <Position>
+                <!-- <RoadPosition roadId="4" s="48.58" t="2.75"/> -->
+                               <!-- <LanePosition roadId="4" laneId="-1" offset="1.0" s="48.58"/> -->
+                
+                <!-- <LanePosition roadId="0" laneId="$Ego_InitPosition_LaneId" offset="0.0" s="5.0"></LanePosition> -->
+                <!-- <WorldPosition x="-8.4" y="-71.0" z="0.5" h="-1.57079632679"/> -->
+                <!-- <WorldPosition h="-1.5812438389848549" x="382.18871558593975" y="280.87868616369943" z="0.19995698125177858"/> -->
+                <WorldPosition h="-1.1449844047403344" x="371.3414965792135" y="286.55653912233697" z="0.199999557784922"/>
+              </Position>
+            </TeleportAction>
+          </PrivateAction>
+          <PrivateAction>
+            <ControllerAction>
+              <AssignControllerAction>
+                <Controller name="HeroAgent">
+                  <Properties>
+                    <Property name="module" value="external_control"/>
+                  </Properties>
+                </Controller>
+              </AssignControllerAction>
+              <OverrideControllerValueAction>
+                <Throttle value="0" active="false"/>
+                <Brake value="0" active="false"/>
+                <Clutch value="0" active="false"/>
+                <ParkingBrake value="0" active="false"/>
+                <SteeringWheel value="0" active="false"/>
+                <Gear number="0" active="false"/>
+              </OverrideControllerValueAction>
+            </ControllerAction>
+          </PrivateAction>
+          <PrivateAction>
+            <LongitudinalAction>
+              <SpeedAction>
+                <SpeedActionDynamics dynamicsShape="step" dynamicsDimension="time" value="0" />
+                <SpeedActionTarget>
+                  <AbsoluteTargetSpeed value="30.0" />
+                </SpeedActionTarget>
+              </SpeedAction>
+            </LongitudinalAction>
+          </PrivateAction>
+        </Private>
+        <Private entityRef="Pedestrian_1">
+          <PrivateAction>
+              <TeleportAction>
+                  <Position>
+                      <WorldPosition h="3.135900412279689" x="369.2846972509596" y="174.09868808967178" z="0.39589040299930517"/>
+                  </Position>
+              </TeleportAction>
+          </PrivateAction>
+      </Private>
+        <Private entityRef="LeadVehicle">
+          <PrivateAction>
+            <TeleportAction>
+              <Position>
+                <!-- <RelativeRoadPosition entityRef="hero" ds="50" dt="-1.0"/> -->
+                <!--                <WorldPosition x="190" y="133" z="0" h="0"/>-->
+                
+                <!-- <RelativeLanePosition entityRef="hero" dLane="0" ds="$LeadVehicle_InitDistance_dx0" offset="0.0" /> -->
+                <!-- <WorldPosition x="-8.4" y="-152.8" z="0.5" h="-1.57079632679"/> -->
+                <WorldPosition h="-1.581243838984849" x="382.05521138037466" y="192.4241412827386" z="0.1999949612580887"/>
+              </Position>
+            </TeleportAction>
+          </PrivateAction>
+          <PrivateAction>
+            <LongitudinalAction>
+              <SpeedAction>
+                <SpeedActionDynamics dynamicsShape="step" dynamicsDimension="time" value="0" />
+                <SpeedActionTarget>
+                  <AbsoluteTargetSpeed value="2.0" />
+                </SpeedActionTarget>
+              </SpeedAction>
+            </LongitudinalAction>
+          </PrivateAction>
+        </Private>
+        <Private entityRef="Vehicle_3">
+          <PrivateAction>
+            <TeleportAction>
+              <Position>
+                <!-- <RelativeRoadPosition entityRef="hero" ds="50" dt="-1.0"/> -->
+                <!--                <WorldPosition x="190" y="133" z="0" h="0"/>-->
+                
+                <!-- <RelativeLanePosition entityRef="hero" dLane="0" ds="$LeadVehicle_InitDistance_dx0" offset="0.0" /> -->
+                <!-- <WorldPosition x="-16.4" y="-152.8" z="0.5" h="-1.57079632679"/> -->
+                <WorldPosition h="-0.6955049877412048" x="337.8903424733772" y="336.79934353004336" z="0.19999952574038782"/>
+              </Position>
+            </TeleportAction>
+          </PrivateAction>
+          <PrivateAction>
+            <LongitudinalAction>
+              <SpeedAction>
+                <SpeedActionDynamics dynamicsShape="step" dynamicsDimension="time" value="0" />
+                <SpeedActionTarget>
+                  <AbsoluteTargetSpeed value="20.0" />
+                </SpeedActionTarget>
+              </SpeedAction>
+            </LongitudinalAction>
+          </PrivateAction>
+        </Private>
+
+        <Private entityRef="Vehicle_4">
+          <PrivateAction>
+            <TeleportAction>
+              <Position>
+                <!-- <RelativeRoadPosition entityRef="hero" ds="50" dt="-1.0"/> -->
+                <!--                <WorldPosition x="190" y="133" z="0" h="0"/>-->
+                
+                <!-- <RelativeLanePosition entityRef="hero" dLane="0" ds="$LeadVehicle_InitDistance_dx0" offset="0.0" /> -->
+                <!-- <WorldPosition x="-16.4" y="-152.8" z="0.5" h="-1.57079632679"/> -->
+                <WorldPosition h="3.141592653589793" x="353.3781153472381" y="189.83020773808477" z="0.2042896468377538"/>
+              </Position>
+            </TeleportAction>
+          </PrivateAction>
+          
+        </Private>
+
+        
+
+        
+      </Actions>
+    </Init>
+    <Story name="ActivateALKSControllerStory">
+      <Act name="ActivateALKSControllerAct">
+        <ManeuverGroup maximumExecutionCount="1" name="ActivateALKSControllerSequence">
+          <Actors selectTriggeringEntities="false">
+            <EntityRef entityRef="hero" />
+          </Actors>
+          <Maneuver name="ActivateALKSControllerManeuver">
+            <Event name="ActivateALKSControllerEvent" priority="overwrite">
+              <Action name="ActivateALKSControllerAction">
+                <PrivateAction>
+                  <ActivateControllerAction lateral="true" longitudinal="true" />
+                </PrivateAction>
+              </Action>
+              <StartTrigger>
+                <ConditionGroup>
+                  <Condition name="ActivateALKSControllerEventCondition" delay="0" conditionEdge="rising">
+                    <ByValueCondition>
+                      <SimulationTimeCondition value="10000" rule="greaterThan" />
+                    </ByValueCondition>
+                  </Condition>
+                </ConditionGroup>
+              </StartTrigger>
+            </Event>
+          </Maneuver>
+        </ManeuverGroup>
+        <StartTrigger>
+          <ConditionGroup>
+            <Condition name="ActivateALKSControllerActCondition" delay="0" conditionEdge="rising">
+              <ByValueCondition>
+                <SimulationTimeCondition value="0" rule="greaterThan" />
+              </ByValueCondition>
+            </Condition>
+          </ConditionGroup>
+        </StartTrigger>
+      </Act>
+    </Story>
+    <Story name="MyStory">
+      <Act name="Behavior">
+        <ManeuverGroup name="ManeuverSequence" maximumExecutionCount="1">
+          <Actors selectTriggeringEntities="false">
+            <EntityRef entityRef="LeadVehicle"/>
+          </Actors>
+          <Maneuver name="FollowLeadingVehicleManeuver">
+            <Event name="LeadingVehicleKeepsVelocity" priority="overwrite">
+              <Action name="LeadingVehicleKeepsVelocity">
+                <PrivateAction>
+                  <LongitudinalAction>
+                    <SpeedAction>
+                      <SpeedActionDynamics dynamicsShape="step" value="20" dynamicsDimension="distance"/>
+                      <SpeedActionTarget>
+                        <AbsoluteTargetSpeed value="$leadingSpeed"/>
+                      </SpeedActionTarget>
+                    </SpeedAction>
+                  </LongitudinalAction>
+                </PrivateAction>
+              </Action>
+              <StartTrigger>
+                <ConditionGroup>
+                  <Condition name="StartConditionLeadingVehicleKeepsVelocity" delay="0" conditionEdge="rising">
+                    <ByEntityCondition>
+                      <TriggeringEntities triggeringEntitiesRule="any">
+                        <EntityRef entityRef="hero"/>
+                      </TriggeringEntities>
+                      <EntityCondition>
+<!--                        <RelativeDistanceCondition entityRef="LeadVehicle" relativeDistanceType="cartesianDistance" value="40.0" freespace="false" rule="lessThan"/>-->
+                        <RelativeDistanceCondition entityRef="LeadVehicle" relativeDistanceType="longitudinal" value="40.0" freespace="true" rule="lessThan"/>
+                      </EntityCondition>
+                    </ByEntityCondition>
+                  </Condition>
+                </ConditionGroup>
+              </StartTrigger>
+            </Event>
+            <Event name="LeadingVehicleWaits" priority="overwrite">
+              <Action name="LeadingVehicleWaits">
+                <PrivateAction>
+                  <LongitudinalAction>
+                    <SpeedAction>
+                      <SpeedActionDynamics dynamicsShape="step" value="10" dynamicsDimension="time"/>
+                      <SpeedActionTarget>
+                        <AbsoluteTargetSpeed value="0.0"/>
+                      </SpeedActionTarget>
+                    </SpeedAction>
+                  </LongitudinalAction>
+                </PrivateAction>
+              </Action>
+              <StartTrigger>
+                <ConditionGroup>
+                  <Condition name="AfterLeadingVehicleKeepsVelocity" delay="0" conditionEdge="rising">
+                    <ByValueCondition>
+                      <StoryboardElementStateCondition storyboardElementType="action" storyboardElementRef="LeadingVehicleKeepsVelocity" state="endTransition"/>
+                    </ByValueCondition>
+                  </Condition>
+                </ConditionGroup>
+              </StartTrigger>
+            </Event>
+          </Maneuver>
+        </ManeuverGroup>
+        <StartTrigger>
+          <ConditionGroup>
+            <Condition name="OverallStartCondition" delay="0" conditionEdge="rising">
+              <ByEntityCondition>
+                <TriggeringEntities triggeringEntitiesRule="any">
+                  <EntityRef entityRef="hero"/>
+                </TriggeringEntities>
+                <EntityCondition>
+                  <TraveledDistanceCondition value="1.0"/>
+                </EntityCondition>
+              </ByEntityCondition>
+            </Condition>
+            <Condition name="StartTime" delay="0" conditionEdge="rising">
+              <ByValueCondition>
+                <SimulationTimeCondition value="0" rule="equalTo"/>
+              </ByValueCondition>
+            </Condition>
+          </ConditionGroup>
+        </StartTrigger>
+        <StopTrigger>
+          <ConditionGroup>
+            <Condition name="EndCondition" delay="0" conditionEdge="rising">
+              <ByEntityCondition>
+                <TriggeringEntities triggeringEntitiesRule="any">
+                  <EntityRef entityRef="hero"/>
+                </TriggeringEntities>
+                <EntityCondition>
+                  <TraveledDistanceCondition value="200.0"/>
+                </EntityCondition>
+              </ByEntityCondition>
+            </Condition>
+          </ConditionGroup>
+        </StopTrigger>
+      </Act>
+    </Story>
+    
+
+    <StopTrigger>
+      <ConditionGroup>
+        <Condition name="End" delay="0" conditionEdge="rising">
+          <ByValueCondition>
+            <SimulationTimeCondition value="$Duration" rule="greaterThan" />
+          </ByValueCondition>
+        </Condition>
+      </ConditionGroup>
+    </StopTrigger>
+  </Storyboard>
+</OpenSCENARIO>
