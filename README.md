@@ -10,3 +10,4 @@ All scenarios required to run ALKS scenarios on CARLA.
 1. Run CARLA
 2. Run Scenario Runner
 3. Run Manual Control
+
