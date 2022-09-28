@@ -5,8 +5,8 @@
 
 3. Install some dependencies for PythonAPI environment. As a reference, for conda, start by creating a new environment:
 ```console
-conda create -n py37 python=3.7
-conda activate py37
+conda create -n CARLA python=3.7
+conda activate CARLA
 
 cd ${CARLA_ROOT}  # Change ${CARLA_ROOT} for your CARLA root folder e.g. CARLA.
 
