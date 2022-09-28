@@ -4,7 +4,7 @@ All scenarios required to run ALKS scenarios on CARLA.
 # Requirements
 - CARLA 0.9.10.1
 - Scenario Runner 0.9.10.X
-[Install Requirements](Install.md)
+[Install Requirements](INSTALL.md)
 
 # Steps
 1. Run CARLA
