@@ -19,18 +19,23 @@ Go to CARLA directory, the location is same with ${CARLA_ROOT}
 ./CarlaUE4.sh
 ```
 2. Run Scenario Runner
-==We need another terminal window==
+
+**We need another terminal window**
+
 Go to CARLA directory, the location is same with ${SCENARIO_RUNNER_ROOT}. Scenario runner has many options to run, we can look the options by using -h tag.
 ```console
 python3 scenario_runner.py -h
 ```
 **example**
+
 We will run the first open scenario *x-4-1.xosc*
 ```console
 python3 scenario_runner.py --openscenario ${OPENSCENARIO_FILE} # Change ${OPENSCENARIO_FILE} for your Opoen Scenario path
 ```
 3. Run Manual Control
-==We need another terminal window==
+
+**We need another terminal window**
+
 Run manual control to attach ego_vehicle camera in the scenario
 ```console
 python3 manual_control.py
