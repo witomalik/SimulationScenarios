@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <OpenSCENARIO>
-  <FileHeader revMajor="1" revMinor="0" date="2020-06-16T10:00:00" description="ALKS Scenario 4.4_1 CutInNoCollision Template" author="BMW AG" />
+  <FileHeader revMajor="1" revMinor="0" date="2020-06-16T10:00:00" description="ALKS Scenario 4.1_2 Swerving Lead Vehicle Template" author="BMW AG" />
   <ParameterDeclarations>
     <!--The ParameterDeclarations section is needed for easy variation.-->
     <ParameterDeclaration name="Ego_InitPosition_LaneId" parameterType="string" value="-4" />
@@ -31,18 +31,52 @@
     <LogicFile filepath="Town04" />
   </RoadNetwork>
   <Entities>
-    <ScenarioObject name="hero">
-      <CatalogReference catalogName="VehicleCatalog" entryName="car_ego"></CatalogReference>
+    <!-- <ScenarioObject name="hero">
+      <CatalogReference catalogName="VehicleCatalog" entryName="car"></CatalogReference>
       <ObjectController>
         <CatalogReference catalogName="ControllerCatalog" entryName="ALKSController"></CatalogReference>
       </ObjectController>
-    </ScenarioObject>
+    </ScenarioObject> -->
     <ScenarioObject name="LeadVehicle">
+      <!-- <Vehicle name="vehicle.lincoln.mkz_2017" vehicleCategory="car"></Vehicle> -->
       <CatalogReference catalogName="VehicleCatalog" entryName="$LeadVehicle_Model"></CatalogReference>
     </ScenarioObject>
-    <ScenarioObject name="standing">
-      <CatalogReference catalogName="VehicleCatalog" entryName="$Standing_Model"></CatalogReference>
+    <ScenarioObject name="hero">
+      <Vehicle name="vehicle.lincoln.mkz_2017" vehicleCategory="car">
+        <ParameterDeclarations/>
+        <Performance maxSpeed="69.444" maxAcceleration="200" maxDeceleration="10.0"/>
+        <BoundingBox>
+          <Center x="1.5" y="0.0" z="0.9"/>
+          <Dimensions width="2.1" length="4.5" height="1.8"/>
+        </BoundingBox>
+        <Axles>
+          <FrontAxle maxSteering="0.5" wheelDiameter="0.6" trackWidth="1.8" positionX="3.1" positionZ="0.3"/>
+          <RearAxle maxSteering="0.0" wheelDiameter="0.6" trackWidth="1.8" positionX="0.0" positionZ="0.3"/>
+        </Axles>
+        <Properties>
+          <Property name="type" value="ego_vehicle"/>
+          <Property name="color" value="0,0,255"/>
+          <!-- Properties are necessary for simulation with openPASS -->
+          <Property name="AirDragCoefficient" value="0.3"/>
+          <Property name="AxleRatio" value="1.0"/>
+          <Property name="DecelerationFromPowertrainDrag" value="0.5"/>
+          <Property name="FrictionCoefficient" value="1.0"/>
+          <Property name="FrontSurface" value="2.4"/>
+          <Property name="GearRatio1" value="9.6"/>
+          <Property name="Mass" value="1300.0"/>
+          <Property name="MaximumEngineSpeed" value="6000.0"/>
+          <Property name="MaximumEngineTorque" value="250.0"/>
+          <Property name="MinimumEngineSpeed" value="900.0"/>
+          <Property name="MinimumEngineTorque" value="-54.0"/>
+          <Property name="MomentInertiaPitch" value="0.0"/>
+          <Property name="MomentInertiaRoll" value="0.0"/>
+          <Property name="MomentInertiaYaw" value="0.0"/>
+          <Property name="NumberOfGears" value="1"/>
+          <Property name="SteeringRatio" value="10.0"/>
+        </Properties>
+      </Vehicle>
     </ScenarioObject>
+    
   </Entities>
   <Storyboard>
     <Init>
@@ -67,7 +101,8 @@
                 <!-- <LanePosition roadId="0" laneId="$Ego_InitPosition_LaneId" offset="0.0" s="5.0"></LanePosition> -->
                 <!-- <LanePosition roadId="4" laneId="-1" offset="1.0" s="48.58"/> -->
                 <!-- <WorldPosition x="-9.4" y="-152.8" z="0.5" h="1.57079632679"/> -->
-                <WorldPosition x="-12.7" y="23.8" z="0.5" h="-1.57079632679"/>
+                <WorldPosition x="-8.2" y="29.2" z="0.5" h="-1.57079632679"/>
+                <!-- <WorldPosition x="-294" y="87" z="0.19" h="-3.11"/> -->
 
               </Position>
             </TeleportAction>
@@ -106,23 +141,13 @@
               <SpeedAction>
                 <SpeedActionDynamics dynamicsShape="step" dynamicsDimension="time" value="0" />
                 <SpeedActionTarget>
-                  <!-- <AbsoluteTargetSpeed value="30.0" /> -->
-                  <RelativeTargetSpeed entityRef="hero" value="100.0" speedTargetValueType="delta" continuous="false" />
+                  <RelativeTargetSpeed entityRef="hero" value="0" speedTargetValueType="delta" continuous="false" />
                 </SpeedActionTarget>
               </SpeedAction>
             </LongitudinalAction>
           </PrivateAction>
         </Private>
-        <Private entityRef="standing">
-          <PrivateAction>
-            <TeleportAction>
-              <Position>
-                <!-- <WorldPosition x="-8.2" y="29.2" z="0.5" h="1.57079632679"/> -->
-                <WorldPosition x="-8.4" y="-152.8" z="0.5" h="-1.57079632679"/>
-              </Position>
-            </TeleportAction>
-          </PrivateAction>
-        </Private>
+        
       </Actions>
     </Init>
     <Story name="ActivateALKSControllerStory">
@@ -175,7 +200,7 @@
                     <SpeedAction>
                       <SpeedActionDynamics dynamicsShape="step" value="50" dynamicsDimension="distance"/>
                       <SpeedActionTarget>
-                        <AbsoluteTargetSpeed value="11.3"/>
+                        <AbsoluteTargetSpeed value="5.0"/>
                       </SpeedActionTarget>
                     </SpeedAction>
                   </LongitudinalAction>
@@ -189,7 +214,7 @@
                         <EntityRef entityRef="hero"/>
                       </TriggeringEntities>
                       <EntityCondition>
-                        <RelativeDistanceCondition entityRef="LeadVehicle" relativeDistanceType="cartesianDistance" value="3.0" freespace="false" rule="lessThan"/>
+                        <RelativeDistanceCondition entityRef="LeadVehicle" relativeDistanceType="cartesianDistance" value="40.0" freespace="false" rule="lessThan"/>
                       </EntityCondition>
                     </ByEntityCondition>
                   </Condition>
@@ -201,7 +226,7 @@
                 <PrivateAction>
                   <LateralAction>
                     <LaneChangeAction>
-                      <LaneChangeActionDynamics dynamicsShape="linear" value="30.0" dynamicsDimension="distance"/>
+                      <LaneChangeActionDynamics dynamicsShape="linear" value="25" dynamicsDimension="distance"/>
                       <LaneChangeTarget>
                         <RelativeTargetLane entityRef="LeadVehicle" value="-1"/>
                       </LaneChangeTarget>
@@ -214,6 +239,29 @@
                   <Condition name="AfterAdversaryAccelerates" delay="0" conditionEdge="rising">
                     <ByValueCondition>
                       <StoryboardElementStateCondition storyboardElementType="action" storyboardElementRef="AdversaryAccelerates" state="completeState"/>
+                    </ByValueCondition>
+                  </Condition>
+                </ConditionGroup>
+              </StartTrigger>
+            </Event>
+            <Event name="AdversarySecondAccelerates" priority="overwrite">
+              <Action name="AdversarySecondAccelerates">
+                <PrivateAction>
+                  <LongitudinalAction>
+                    <SpeedAction>
+                      <SpeedActionDynamics dynamicsShape="step" value="50" dynamicsDimension="distance"/>
+                      <SpeedActionTarget>
+                        <AbsoluteTargetSpeed value="50.0"/>
+                      </SpeedActionTarget>
+                    </SpeedAction>
+                  </LongitudinalAction>
+                </PrivateAction>
+              </Action>
+              <StartTrigger>
+                <ConditionGroup>
+                  <Condition name="AfterAdversaryChangesLane" delay="0" conditionEdge="rising">
+                    <ByValueCondition>
+                      <StoryboardElementStateCondition storyboardElementType="action" storyboardElementRef="AdversaryChangesLane" state="completeState"/>
                     </ByValueCondition>
                   </Condition>
                 </ConditionGroup>

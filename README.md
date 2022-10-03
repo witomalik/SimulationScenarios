@@ -41,3 +41,8 @@ Run manual control to attach ego_vehicle camera in the scenario
 python3 manual_control.py
 ```
 
+# Modifying Scenarios
+To modify the scenarios based on what we needed, we can use some tools for it. In this simple case we will use QGIS with all the plugins.
+
+[Modifying Scenarios](MODIFY.md)
+
