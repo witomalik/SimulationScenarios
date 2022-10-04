@@ -175,7 +175,7 @@
                     <SpeedAction>
                       <SpeedActionDynamics dynamicsShape="step" value="50" dynamicsDimension="distance"/>
                       <SpeedActionTarget>
-                        <AbsoluteTargetSpeed value="11.3"/>
+                        <AbsoluteTargetSpeed value="11.0"/>
                       </SpeedActionTarget>
                     </SpeedAction>
                   </LongitudinalAction>
@@ -189,7 +189,7 @@
                         <EntityRef entityRef="hero"/>
                       </TriggeringEntities>
                       <EntityCondition>
-                        <RelativeDistanceCondition entityRef="LeadVehicle" relativeDistanceType="cartesianDistance" value="3.0" freespace="false" rule="lessThan"/>
+                        <RelativeDistanceCondition entityRef="LeadVehicle" relativeDistanceType="cartesianDistance" value="4.0" freespace="false" rule="lessThan"/>
                       </EntityCondition>
                     </ByEntityCondition>
                   </Condition>
@@ -229,7 +229,7 @@
                   <EntityRef entityRef="hero"/>
                 </TriggeringEntities>
                 <EntityCondition>
-                  <TraveledDistanceCondition value="1.0"/>
+                  <TraveledDistanceCondition value="0.5"/>
                 </EntityCondition>
               </ByEntityCondition>
             </Condition>
