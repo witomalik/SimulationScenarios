@@ -1,24 +1,19 @@
 # New Scenarios
 This scenarios conatain hard scenarios build using openscenario to be tested on OpenPilot.
 
-1. Speed Difference
-
+## 1. Speed Difference
 This scenario where the lead car have speed differenve than ego car.
 
-2. Lead Static
-
+## 2. Lead Static
 This scenario is about the lead vehicle is driving in static speed.
 
-3. Uphill, Downhill & Curvature
-
+## 3. Uphill, Downhill & Curvature
 This scenario is only ego car driving in the high curvature road with uphill and downhill condition.
 
-4. Cut In
-
+## 4. Cut In
 The lead vehicle is cutting in into ego lane to avoid a collision.
 
-5. No Lane Information
-
+## 5. No Lane Information
 The map is using CARLA Town 4 XODR without roadmap provided. The custom map is included in here.
 
 # Visualization
