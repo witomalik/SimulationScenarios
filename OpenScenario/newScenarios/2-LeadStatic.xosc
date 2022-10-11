@@ -69,7 +69,8 @@
               <AssignControllerAction>
                 <Controller name="HeroAgent">
                   <Properties>
-                    <Property name="module" value="external_control"/>
+                    <Property name="module" value="simple_vehicle_control"/>
+                    <Property name="attach_camera" value="true"/>
                   </Properties>
                 </Controller>
               </AssignControllerAction>
@@ -83,6 +84,16 @@
               </OverrideControllerValueAction>
             </ControllerAction>
           </PrivateAction>
+          <PrivateAction>
+            <LongitudinalAction>
+              <SpeedAction>
+                <SpeedActionDynamics dynamicsShape="step" dynamicsDimension="time" value="0" />
+                <SpeedActionTarget>
+                  <AbsoluteTargetSpeed value="100.0" />
+                </SpeedActionTarget>
+              </SpeedAction>
+            </LongitudinalAction>
+          </PrivateAction>
         </Private>
         <Private entityRef="TargetBlocking">
           <PrivateAction>
@@ -91,7 +102,8 @@
                 <!-- <LanePosition roadId="0" laneId="$Ego_InitPosition_LaneId" offset="0.0" s="500.0"></LanePosition> -->
                 <!-- <WorldPosition x="-10.4" y="-71.0" z="0.5" h="-1.57079632679"/> -->
                 <!-- <WorldPosition h="-1.3449844047403344" x="371.3414965792135" y="290.55653912233697" z="0.199999557784922"/> -->
-                <WorldPosition x="-9.4" y="-71.0" z="0.5" h="-1.57079632679"/>
+                <!-- <WorldPosition x="-9.4" y="-71.0" z="0.5" h="-1.57079632679"/> -->
+                <WorldPosition x="-201.3" y="-411.3" z="0.5" h="-2.57079632679"/>
               </Position>
             </TeleportAction>
           </PrivateAction>
@@ -100,7 +112,7 @@
               <SpeedAction>
                 <SpeedActionDynamics dynamicsShape="step" dynamicsDimension="time" value="0" />
                 <SpeedActionTarget>
-                  <AbsoluteTargetSpeed value="10.0" />
+                  <AbsoluteTargetSpeed value="0.0" />
                 </SpeedActionTarget>
               </SpeedAction>
             </LongitudinalAction>
